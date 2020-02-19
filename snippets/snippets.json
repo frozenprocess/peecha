@@ -1,0 +1,53 @@
+{
+    "networkpolicy": {
+        "prefix": "networkpolicy",
+        "body": [
+            "apiversion: projectcalico.org/v3",
+            "kind: NetworkPolicy",
+            "metadata:",
+            "\tname: $1",
+            "\tnamespace: $2",
+            "spec:",
+            "selector:",
+            "types:",
+            "\t${3|\t- Ingress,\t- Egress,- Ingress\n- Egress\n|}"
+            
+        ],
+        "description": "Calico api version"
+    },
+    "networktypesI": {
+        "prefix": "Ingress",
+        "body": [
+            "ingress:",
+            "- action: ${1|Allow,Deny,Log,Pass|}",
+            "\tmetadata:",
+              "\t\tannotations:",
+                "\t\t$2: $3",
+            "${4|notprotocol,protocol|}: ${5|TCP,UDP,ICMP,ICMPv6,SCTP,UDPLite|}",
+            "ipversion: ${6|4,6|}",
+            "source:",
+              "\tselector: $7 == '$8'",
+            "destination:",
+              "\t${9|ports,notports|}:",
+              "\t$10"
+        ]
+    },
+    "networktypesE" : {
+        "prefix": "Egress",
+        "body": [
+            "egress:",
+            "- action: ${1|Allow,Deny,Log,Pass|}",
+            "\tmetadata:",
+              "\t\tannotations:",
+                "\t\t$2: $3",
+            "${4|notprotocol,protocol|}: ${5|TCP,UDP,ICMP,ICMPv6,SCTP,UDPLite|}",
+            "ipversion: ${6|4,6|}",
+            "source:",
+              "\tselector: $7 == '$8'",
+            "destination:",
+              "\t${9|ports,notports|}:",
+              "\t$10"
+        ]
+    }
+    
+}
