@@ -1,4 +1,18 @@
 {
+    "bgppeer": {
+      "prefix": "bgppeer",
+      "body": [
+        "apiVersion: projectcalico.org/v3",
+        "kind: BGPPeer",
+        "metadata:",
+          "name: $1",
+        "spec:",
+          "node: $1",
+          "peerIP: $2",
+          "asNumber: $3",
+          "{$4|nodeSelector,peerSelector|}:$5"
+      ]
+    },
     "networkpolicy": {
         "prefix": "networkpolicy",
         "body": [
